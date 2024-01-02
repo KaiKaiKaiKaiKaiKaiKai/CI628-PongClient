@@ -26,20 +26,26 @@ void MyGame::send(std::string message) {
 }
 
 void MyGame::input(SDL_Event& event) {
+    const bool keyDown = (event.type == SDL_KEYDOWN);
+
     switch (event.key.keysym.sym) {
-        case SDLK_w:
-            send(event.type == SDL_KEYDOWN ? "W_DOWN" : "W_UP");
-            break;
-        case SDLK_s:
-            send(event.type == SDL_KEYDOWN ? "S_DOWN" : "S_UP");
-            break;
-        case SDLK_i:
-            send(event.type == SDL_KEYDOWN ? "I_DOWN" : "I_UP");
-            break;
-        case SDLK_k:
-            send(event.type == SDL_KEYDOWN ? "K_DOWN" : "K_UP");
-            break;
+    case SDLK_w:
+        sendKey("W", keyDown);
+        break;
+    case SDLK_s:
+        sendKey("S", keyDown);
+        break;
+    case SDLK_i:
+        sendKey("I", keyDown);
+        break;
+    case SDLK_k:
+        sendKey("K", keyDown);
+        break;
     }
+}
+
+void MyGame::sendKey(std::string key, bool keyDown) {
+    send(key + (keyDown ? "_DOWN" : "_UP"));
 }
 
 void MyGame::update() {
