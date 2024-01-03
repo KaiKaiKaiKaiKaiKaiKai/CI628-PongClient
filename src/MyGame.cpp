@@ -96,12 +96,14 @@ void MyGame::render(SDL_Renderer* renderer) {
 
 // Render Sprite on the screen
 void MyGame::Sprite::render(SDL_Renderer* renderer) {
+    SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255); // Set draw color to red
     SDL_RenderDrawRect(renderer, this); // Render the Sprite as a rectangle
+    SDL_RenderFillRect(renderer, this); // Fill rectangle with color
 }
 
 // Render Text on the screen
 void MyGame::Text::render(SDL_Renderer* renderer) {
-    if (!font) { font = TTF_OpenFont("res/arial.ttf", 55); } // Load font if not already loaded
+    if (!font) { font = TTF_OpenFont("res/pong.ttf", 70); } // Load font if not already loaded
 
     // Render text on the screen
     SDL_Surface* textSurface = TTF_RenderText_Solid(font, value.c_str(), color);

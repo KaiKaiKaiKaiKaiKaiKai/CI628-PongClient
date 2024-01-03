@@ -37,7 +37,7 @@ class MyGame
         // Constructor without parameters
         Text()
         {
-            font = TTF_OpenFont("res/arial.ttf", 55); // Load default font
+            font = TTF_OpenFont("res/pong.ttf", 70); // Load default font
             value = "";                               // Initialize text value as empty
             x = 0;                                    // Initialize x-coordinate
             y = 0;                                    // Initialize y-coordinate
@@ -47,7 +47,7 @@ class MyGame
         // Constructor with parameters
         Text(std::string value_, int x_, int y_, SDL_Color color_)
         {
-            font = TTF_OpenFont("res/arial.ttf", 55); // Load font
+            font = TTF_OpenFont("res/pong.ttf", 70); // Load font
             value = value_;                           // Set text value
             x = x_;                                   // Set x-coordinate
             y = y_;                                   // Set y-coordinate
@@ -88,7 +88,7 @@ class MyGame
         // Constructor for Player with additional parameters for score rendering
         Player(int x_, int y_, int w_, int h_, int scoreX_, int scoreY_) : Sprite(x_, y_, w_, h_)
         {
-            scoreText = Text("0", scoreX_, scoreY_, { 255, 255, 255 }); // Initialize score text
+            scoreText = Text("0", scoreX_, scoreY_, { 240, 255, 255 }); // Initialize score text
         }
 
         int getScore();               // Get player score
