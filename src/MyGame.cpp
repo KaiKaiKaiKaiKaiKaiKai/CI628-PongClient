@@ -1,92 +1,114 @@
 #include "MyGame.h"
+#include <Windows.h>
 
+// Function to handle receiving messages and updating game data accordingly
 void MyGame::on_receive(std::string cmd, std::vector<std::string>& args) {
     if (cmd == "GAME_DATA") {
-        // we should have exactly 4 arguments
+        // Update game data if the command is for game data
         if (args.size() == 4) {
-            game_data.player1Y = stoi(args.at(0));
-            game_data.player2Y = stoi(args.at(1));
-            game_data.ballX = stoi(args.at(2));
-            game_data.ballY = stoi(args.at(3));
+            game_data.player1Y = stoi(args.at(0)); // Update player 1 Y-coordinate
+            game_data.player2Y = stoi(args.at(1)); // Update player 2 Y-coordinate
+            game_data.ballX = stoi(args.at(2));    // Update ball X-coordinate
+            game_data.ballY = stoi(args.at(3));    // Update ball Y-coordinate
         }
-    } else if (cmd == "SCORES") {
-        // we should have exactly 2 arguments
+    }
+    else if (cmd == "SCORES") {
+        // Update scores if the command is for scores
         if (args.size() == 2) {
-            scores.player1Score = stoi(args.at(0));
-            scores.player2Score = stoi(args.at(1));
+            scores.player1Score = stoi(args.at(0)); // Update player 1 score
+            scores.player2Score = stoi(args.at(1)); // Update player 2 score
         }
     }
     else {
-        std::cout << "Received: " << cmd << std::endl;
+        std::cout << "Received: " << cmd << std::endl; // Log the received command
     }
 }
 
+// Function to add a message to the message queue
 void MyGame::send(std::string message) {
-    messages.push_back(message);
+    messages.push_back(message); // Add the message to the vector
 }
 
+// Function to handle keyboard input events
 void MyGame::input(SDL_Event& event) {
-    const bool keyDown = (event.type == SDL_KEYDOWN);
+    const bool keyDown = (event.type == SDL_KEYDOWN); // Check if key is pressed or released
 
     switch (event.key.keysym.sym) {
     case SDLK_w:
-        sendKey("W", keyDown);
+        sendKey("W", keyDown); // Send 'W' key status
         break;
     case SDLK_s:
-        sendKey("S", keyDown);
+        sendKey("S", keyDown); // Send 'S' key status
         break;
     case SDLK_i:
-        sendKey("I", keyDown);
+        sendKey("I", keyDown); // Send 'I' key status
         break;
     case SDLK_k:
-        sendKey("K", keyDown);
+        sendKey("K", keyDown); // Send 'K' key status
         break;
     }
 }
 
+// Function to send key events to the message queue
 void MyGame::sendKey(std::string key, bool keyDown) {
-    send(key + (keyDown ? "_DOWN" : "_UP"));
+    send(key + (keyDown ? "_DOWN" : "_UP")); // Send key status message
 }
 
-void MyGame::update() {
-    player1.y = game_data.player1Y;
-    player2.y = game_data.player2Y;
+// Get current player score
+int MyGame::Player::getScore() {
+    return score;
+}
 
-    ball.x = game_data.ballX;
+// Set value for Text object
+void MyGame::Text::setValue(std::string value_) {
+    value = value_;
+}
+
+// Update player's score and update associated text
+void MyGame::Player::updateScore(int score_) {
+    score = score_; // Update player's score
+    scoreText.setValue(std::to_string(getScore())); // Update displayed score text
+}
+
+// Update game state based on received data
+void MyGame::update() {
+    player1.y = game_data.player1Y; // Update player 1 position
+    player2.y = game_data.player2Y; // Update player 2 position
+
+    ball.x = game_data.ballX; // Update ball position
     ball.y = game_data.ballY;
 
-    player1Score = scores.player1Score;
-    player2Score = scores.player2Score;
+    player1.updateScore(scores.player1Score); // Update player 1 score
+    player2.updateScore(scores.player2Score); // Update player 2 score
 }
 
+// Render game elements on the screen
 void MyGame::render(SDL_Renderer* renderer) {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    
-    SDL_RenderDrawRect(renderer, &player1);
-    SDL_RenderDrawRect(renderer, &player2);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set render color
 
-    SDL_RenderDrawRect(renderer, &ball);
+    // Render players, their scores, and the ball
+    player1.render(renderer);
+    player2.render(renderer);
+    player1.scoreText.render(renderer);
+    player2.scoreText.render(renderer);
+    ball.render(renderer);
+}
 
-    // Create a surface from the text
-    std::string player1ScoreText = std::to_string(player1Score);
-    SDL_Surface* player1ScoreTextSurface = TTF_RenderText_Solid(scoreFont, player1ScoreText.c_str(), scoreColor);
-    SDL_Texture* player1ScoreTextTexture = SDL_CreateTextureFromSurface(renderer, player1ScoreTextSurface);
+// Render Sprite on the screen
+void MyGame::Sprite::render(SDL_Renderer* renderer) {
+    SDL_RenderDrawRect(renderer, this); // Render the Sprite as a rectangle
+}
 
-    std::string player2ScoreText = std::to_string(player2Score);
-    SDL_Surface* player2ScoreTextSurface = TTF_RenderText_Solid(scoreFont, player2ScoreText.c_str(), scoreColor);
-    SDL_Texture* player2ScoreTextTexture = SDL_CreateTextureFromSurface(renderer, player2ScoreTextSurface);
+// Render Text on the screen
+void MyGame::Text::render(SDL_Renderer* renderer) {
+    if (!font) { font = TTF_OpenFont("res/arial.ttf", 55); } // Load font if not already loaded
 
-    // Define a rect for the text position
-    SDL_Rect player1ScoreTextRect = { GAME_WIDTH / 4 - 50, 110, player1ScoreTextSurface->w, player1ScoreTextSurface->h };
-    SDL_Rect player2ScoreTextRect = { 3 * GAME_WIDTH / 4 - 20 + 40, 110, player2ScoreTextSurface->w, player2ScoreTextSurface->h };
+    // Render text on the screen
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, value.c_str(), color);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    SDL_Rect textRect = { x, y, textSurface->w, textSurface->h };
 
-    // Render the text
-    SDL_RenderCopy(renderer, player1ScoreTextTexture, NULL, &player1ScoreTextRect);
-    SDL_RenderCopy(renderer, player2ScoreTextTexture, NULL, &player2ScoreTextRect);
-
-    SDL_FreeSurface(player1ScoreTextSurface);
-    SDL_DestroyTexture(player1ScoreTextTexture);
-
-    SDL_FreeSurface(player2ScoreTextSurface);
-    SDL_DestroyTexture(player2ScoreTextTexture);
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect); // Copy texture to renderer
+    SDL_FreeSurface(textSurface); // Free surface memory
+    SDL_DestroyTexture(textTexture); // Destroy texture
 }

@@ -78,8 +78,6 @@ static int on_send(void* socket_ptr) {
 void loop(SDL_Renderer* renderer) {
     SDL_Event event;
 
-   game->scoreFont = TTF_OpenFont("res/arial.ttf", 55);
-
     while (is_running) {
         // input
         while (SDL_PollEvent(&event)) {
