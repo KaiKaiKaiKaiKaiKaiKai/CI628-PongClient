@@ -104,17 +104,18 @@ void MyGame::render(SDL_Renderer* renderer)
     // Render players, their scores, and the ball
     player1.render(renderer);
     player2.render(renderer);
-    player1.scoreText.render(renderer);
-    player2.scoreText.render(renderer);
+
     ball.render(renderer);
 }
 
 // Render Sprite on the screen
-void MyGame::Sprite::render(SDL_Renderer* renderer)
+void MyGame::Player::render(SDL_Renderer* renderer)
 {
     SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255); // Set draw color to gray
     SDL_RenderDrawRect(renderer, this);                   // Render the Sprite as a rectangle
     SDL_RenderFillRect(renderer, this);                   // Fill rectangle with color
+
+    scoreText.render(renderer);
 }
 
 // Render Ball on the screen

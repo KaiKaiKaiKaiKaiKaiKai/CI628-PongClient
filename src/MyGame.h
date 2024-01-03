@@ -65,35 +65,27 @@ class MyGame
         SDL_Color color;   // Text color
     };
 
-    // Nested Sprite class inheriting from SDL_Rect
-    class Sprite : public SDL_Rect
+    // Nested Player class inheriting from SDL_Rect
+    class Player : public SDL_Rect
     {
     public:
         // Constructor with parameters for setting position and dimensions
-        Sprite(int x_, int y_, int w_, int h_)
+        Player(int x_, int y_, int w_, int h_, int scoreX_, int scoreY_)
         {
             x = x_; // Set x-coordinate
             y = y_; // Set y-coordinate
             w = w_; // Set width
             h = h_; // Set height
-        }
 
-        void render(SDL_Renderer* renderer); // Render sprite on the screen
-    };
-
-    // Nested Player class inheriting from Sprite
-    class Player : public Sprite
-    {
-    public:
-        // Constructor for Player with additional parameters for score rendering
-        Player(int x_, int y_, int w_, int h_, int scoreX_, int scoreY_) : Sprite(x_, y_, w_, h_)
-        {
             scoreText = Text("0", scoreX_, scoreY_, { 240, 255, 255 }); // Initialize score text
         }
 
+        
         int getScore();               // Get player score
-        void updateScore(int score_); // Update player score
         Text scoreText;               // Text object for displaying score
+
+        void render(SDL_Renderer* renderer); // Render sprite on the screen
+        void updateScore(int score_); // Update player score
 
     private:
         int score = 0; // Player score
