@@ -38,20 +38,20 @@ class MyGame
         Text()
         {
             font = TTF_OpenFont("res/pong.ttf", 70); // Load default font
-            value = "";                               // Initialize text value as empty
-            x = 0;                                    // Initialize x-coordinate
-            y = 0;                                    // Initialize y-coordinate
-            color = { 255, 255, 255 };                  // Initialize text color
+            value = "";                              // Initialize text value as empty
+            x = 0;                                   // Initialize x-coordinate
+            y = 0;                                   // Initialize y-coordinate
+            color = { 255, 255, 255 };                 // Initialize text color
         }
 
         // Constructor with parameters
         Text(std::string value_, int x_, int y_, SDL_Color color_)
         {
             font = TTF_OpenFont("res/pong.ttf", 70); // Load font
-            value = value_;                           // Set text value
-            x = x_;                                   // Set x-coordinate
-            y = y_;                                   // Set y-coordinate
-            color = color_;                           // Set text color
+            value = value_;                          // Set text value
+            x = x_;                                  // Set x-coordinate
+            y = y_;                                  // Set y-coordinate
+            color = color_;                          // Set text color
         }
 
         TTF_Font* font;                      // Font used for rendering
@@ -100,12 +100,14 @@ class MyGame
     };
 
     // Nested Ball class
-    class Ball {
+    class Ball
+    {
     public:
-        Ball(int radius_) {
+        Ball(int radius_)
+        {
             radius = radius_; // Set radius
-            centerX = 0; // Set centerX
-            centerY = 0; // Set centerY
+            centerX = 0;      // Set centerX
+            centerY = 0;      // Set centerY
         }
 
         int centerX; // Center of ball along x axis
@@ -119,9 +121,9 @@ class MyGame
 
 private:
     // Instances of Player and Sprite for the game
-    Player player1 = Player(GAME_WIDTH / 4, 0, 20, 60, GAME_WIDTH / 4 - 100, 110);                   // Player 1
+    Player player1 = Player(GAME_WIDTH / 4, 0, 20, 60, GAME_WIDTH / 4 - 100, 110);                  // Player 1
     Player player2 = Player(3 * GAME_WIDTH / 4 - 20, 0, 20, 60, 3 * GAME_WIDTH / 4 - 20 + 90, 110); // Player 2
-    Ball ball = Ball(10);                                                             // Game ball
+    Ball ball = Ball(10);                                                                           // Game ball
 
 public:
     std::vector<std::string> messages; // Vector to store game messages
