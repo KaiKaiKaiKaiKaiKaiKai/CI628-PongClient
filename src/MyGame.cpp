@@ -1,6 +1,7 @@
 #include "MyGame.h"
 #include <Windows.h>
 
+/* MyGame */
 // Function to handle receiving messages and updating game data accordingly
 void MyGame::on_receive(std::string cmd, std::vector<std::string>& args)
 {
@@ -64,24 +65,6 @@ void MyGame::sendKey(std::string key, bool keyDown)
     send(key + (keyDown ? "_DOWN" : "_UP")); // Send key status message
 }
 
-// Get current player score
-int MyGame::Player::getScore()
-{
-    return score;
-}
-
-// Set value for Text object
-void MyGame::Text::setValue(std::string value_)
-{
-    value = value_;
-}
-
-// Update player's score and update associated text
-void MyGame::Player::updateScore(int score_)
-{
-    score = score_;                                 // Update player's score
-    scoreText.setValue(std::to_string(getScore())); // Update displayed score text
-}
 
 // Update game state based on received data
 void MyGame::update()
@@ -108,6 +91,23 @@ void MyGame::render(SDL_Renderer* renderer)
     ball.render(renderer);
 }
 
+
+
+
+/* Player */
+// Get current player score
+int MyGame::Player::getScore()
+{
+    return score;
+}
+
+// Update player's score and update associated text
+void MyGame::Player::updateScore(int score_)
+{
+    score = score_;                                 // Update player's score
+    scoreText.setValue(std::to_string(getScore())); // Update displayed score text
+}
+
 // Render Sprite on the screen
 void MyGame::Player::render(SDL_Renderer* renderer)
 {
@@ -117,6 +117,10 @@ void MyGame::Player::render(SDL_Renderer* renderer)
     scoreText.render(renderer);
 }
 
+
+
+
+/* Ball */
 // Render Ball on the screen
 void MyGame::Ball::render(SDL_Renderer* renderer)
 {
@@ -155,6 +159,16 @@ void MyGame::Ball::render(SDL_Renderer* renderer)
             error += (tx - diameter);
         }
     }
+}
+
+
+
+
+/* Text */
+// Set value for Text object
+void MyGame::Text::setValue(std::string value_)
+{
+    value = value_;
 }
 
 // Render Text on the screen
