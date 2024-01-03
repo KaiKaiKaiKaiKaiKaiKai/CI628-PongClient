@@ -75,8 +75,8 @@ void MyGame::update() {
     player1.y = game_data.player1Y; // Update player 1 position
     player2.y = game_data.player2Y; // Update player 2 position
 
-    ball.x = game_data.ballX; // Update ball position
-    ball.y = game_data.ballY;
+    ball.centerX = game_data.ballX; // Update ball position
+    ball.centerY = game_data.ballY;
 
     player1.updateScore(scores.player1Score); // Update player 1 score
     player2.updateScore(scores.player2Score); // Update player 2 score
@@ -96,9 +96,44 @@ void MyGame::render(SDL_Renderer* renderer) {
 
 // Render Sprite on the screen
 void MyGame::Sprite::render(SDL_Renderer* renderer) {
-    SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255); // Set draw color to red
+    SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255); // Set draw color to gray
     SDL_RenderDrawRect(renderer, this); // Render the Sprite as a rectangle
     SDL_RenderFillRect(renderer, this); // Fill rectangle with color
+}
+
+// Render Ball on the screen
+void MyGame::Ball::render(SDL_Renderer* renderer) {
+    SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255); // Set color to gray
+
+    int diameter = (radius * 2);
+    int x = (radius - 1);
+    int y = 0;
+    int tx = 1;
+    int ty = 1;
+    int error = (tx - diameter);
+
+    while (x >= y) {
+        // Draw eight points by symmetry
+        for (int y = -radius; y <= radius; ++y) { // Iterate over the vertical range of the circle
+            for (int x = -radius; x <= radius; ++x) { // Iterate over the horizontal range of the circle
+                if (x * x + y * y <= radius * radius) { // Check if the point falls within the circle equation
+                    SDL_RenderDrawPoint(renderer, centerX + x, centerY + y); // Render the point inside the circle
+                }
+            }
+        }
+
+        if (error <= 0) {
+            ++y;
+            error += ty;
+            ty += 2;
+        }
+
+        if (error > 0) {
+            --x;
+            tx += 2;
+            error += (tx - diameter);
+        }
+    }
 }
 
 // Render Text on the screen

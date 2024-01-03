@@ -99,11 +99,29 @@ class MyGame
         int score = 0; // Player score
     };
 
+    // Nested Ball class
+    class Ball {
+    public:
+        Ball(int radius_) {
+            radius = radius_; // Set radius
+            centerX = 0; // Set centerX
+            centerY = 0; // Set centerY
+        }
+
+        int centerX; // Center of ball along x axis
+        int centerY; // Center of ball along y axis
+
+        void render(SDL_Renderer* renderer); // Render ball on the screen
+
+    private:
+        int radius; // Radius of ball
+    };
+
 private:
     // Instances of Player and Sprite for the game
-    Player player1 = Player(GAME_WIDTH / 4, 0, 20, 60, GAME_WIDTH / 4 - 50, 110);                   // Player 1
-    Player player2 = Player(3 * GAME_WIDTH / 4 - 20, 0, 20, 60, 3 * GAME_WIDTH / 4 - 20 + 40, 110); // Player 2
-    Sprite ball = Sprite(0, 0, 20, 20);                                                             // Game ball
+    Player player1 = Player(GAME_WIDTH / 4, 0, 20, 60, GAME_WIDTH / 4 - 100, 110);                   // Player 1
+    Player player2 = Player(3 * GAME_WIDTH / 4 - 20, 0, 20, 60, 3 * GAME_WIDTH / 4 - 20 + 90, 110); // Player 2
+    Ball ball = Ball(10);                                                             // Game ball
 
 public:
     std::vector<std::string> messages; // Vector to store game messages
