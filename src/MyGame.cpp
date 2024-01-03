@@ -99,7 +99,7 @@ void MyGame::update()
 // Render game elements on the screen
 void MyGame::render(SDL_Renderer* renderer)
 {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set render color
+    SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255); // Set draw color to gray
 
     // Render players, their scores, and the ball
     player1.render(renderer);
@@ -111,7 +111,6 @@ void MyGame::render(SDL_Renderer* renderer)
 // Render Sprite on the screen
 void MyGame::Player::render(SDL_Renderer* renderer)
 {
-    SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255); // Set draw color to gray
     SDL_RenderDrawRect(renderer, this);                   // Render the Sprite as a rectangle
     SDL_RenderFillRect(renderer, this);                   // Fill rectangle with color
 
@@ -121,8 +120,6 @@ void MyGame::Player::render(SDL_Renderer* renderer)
 // Render Ball on the screen
 void MyGame::Ball::render(SDL_Renderer* renderer)
 {
-    SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255); // Set color to gray
-
     int diameter = (radius * 2);
     int x = (radius - 1);
     int y = 0;
